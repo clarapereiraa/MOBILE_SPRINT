@@ -10,7 +10,7 @@ import {
 } from "react-native";
 import api from "../axios/axios";
 
-export default function Login() {
+export default function Login({navigation}) {
   const [user, setUser] = useState({
     email: "",
     password: "",
@@ -20,35 +20,40 @@ export default function Login() {
     await api.postLogin(user).then(
       (response) => {
         Alert.alert("OK", response.data.message);
+        navigation.navigate("Home");
       },
       (error) => {
-        console.log("Error", error.response.data.error);
+        console.log(error);
+        Alert.alert("Erro", error.response.data.error);
       }
     );
   }
-
   return (
     <View style={styles.container}>
-      <Text style={styles.title}> Faça Login</Text>
+      <Text style={styles.title}>Faça Login</Text>
       <TextInput
-        style={styles.input}
-        placeholder="Email"
+        placeholder="E-mail"
         value={user.email}
         onChangeText={(value) => {
           setUser({ ...user, email: value });
         }}
+        style={styles.input}
       />
       <TextInput
-        style={styles.input}
         placeholder="Senha"
         value={user.password}
         onChangeText={(value) => {
           setUser({ ...user, password: value });
         }}
+        style={styles.input}
       />
       <TouchableOpacity onPress={handleLogin} style={styles.button}>
-        <Text>Entrar</Text>
+        <Text style={styles.buttonText}>Entrar</Text>
       </TouchableOpacity>
+      <Button
+        title="Cadastro"
+        onPress={() => navigation.navigate("Cadastro")}
+      />
     </View>
   );
 }
@@ -58,21 +63,26 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-  },
-  title: {
-    fontSize: 28,
-    fontWeight: "bold",
+    backgroundColor: "white",
+    padding: 20,
   },
   input: {
-    width: "100%",
+    width: 200,
     height: 40,
-    borderBottomWidth: 1,
+    borderWidth: 1,
     marginBottom: 20,
     paddingHorizontal: 10,
   },
   button: {
-    backgroundColor: "green",
+    backgroundColor: "#fff",
     padding: 10,
     borderRadius: 5,
+    alignItems: "center",
+    width: "100%",
+  },
+  title: {
+    fontSize: 25,
+    fontWeight: "bold",
+    marginBottom: 20,
   },
 });
