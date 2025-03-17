@@ -16,6 +16,7 @@ export default function Cadastro({navigation}) {
     email: "",
     cpf: "",
     password: "",
+    data_nascimento: "",
     
   });
 
@@ -58,6 +59,12 @@ export default function Cadastro({navigation}) {
         placeholder="Senha"
         value={user.password}
         onChangeText={(value) => setUser({ ...user, password: value })}
+        style={styles.input}
+      />
+      <TextInput
+        placeholder="data_nascimento"
+        value={user.data_nascimento}
+        onChangeText={(value) => setUser({ ...user, data_nascimento: value })}
         style={styles.input}
       />
       <TouchableOpacity onPress={handleCadastro} style={styles.button}>

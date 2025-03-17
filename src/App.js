@@ -1,4 +1,8 @@
-import CadastroIngressoScreen from './screens/CadastroIngressoScreen';
+import React from 'react';
+import { NavigationContainer } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
+import LoginScreen from './screens/LoginScreen';
+import CadastroScreen from './screens/CadastroScreen';
 
 const Stack = createStackNavigator();
 
