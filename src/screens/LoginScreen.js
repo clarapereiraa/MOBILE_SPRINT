@@ -10,7 +10,7 @@ import {
 } from "react-native";
 import api from "../axios/axios";
 
-export default function Login({navigation}) {
+export default function Login({ navigation }) {
   const [user, setUser] = useState({
     email: "",
     password: "",
@@ -20,7 +20,7 @@ export default function Login({navigation}) {
     await api.postLogin(user).then(
       (response) => {
         Alert.alert("OK", response.data.message);
-        navigation.navigate("Home");
+        navigation.navigate("Home"); // Redireciona para a tela Home após login
       },
       (error) => {
         console.log(error);
@@ -74,7 +74,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
   },
   button: {
-    backgroundColor: "#fff",
+    backgroundColor: "#492CFF",
     padding: 10,
     borderRadius: 5,
     alignItems: "center",

@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "agendaApp",
-    "slug": "agendaApp",
+    "name": "meuApp",
+    "slug": "meuApp",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
