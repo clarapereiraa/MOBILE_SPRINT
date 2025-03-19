@@ -1,32 +1,18 @@
 import React from "react";
-import { View, Text, TouchableOpacity, StyleSheet, Button } from "react-native";
+import { 
+  View, 
+  Text, 
+  StyleSheet, 
+  Image 
+} from "react-native";
 
 export default function Home({ navigation }) {
   return (
     <View style={styles.container}>
+      {/* Logo do SENAI */}
+      <Image source={require("../img/logosenai.png")} style={styles.logo} />
+
       <Text style={styles.title}>Bem-vindo(a)</Text>
-
-      <TouchableOpacity 
-        style={styles.button} 
-        onPress={() => navigation.navigate("CadastroEvento")}
-      >
-        <Text style={styles.buttonText}>Cadastro de Evento</Text>
-      </TouchableOpacity>
-
-      <TouchableOpacity 
-        style={styles.button} 
-        onPress={() => navigation.navigate("CadastroOrganizador")}
-      >
-        <Text style={styles.buttonText}>Cadastro de Organizador</Text>
-      </TouchableOpacity>
-
-      <TouchableOpacity 
-        style={styles.button} 
-        onPress={() => navigation.navigate("CadastroIngresso")}
-      >
-        <Text style={styles.buttonText}>Cadastro de Ingresso</Text>
-      </TouchableOpacity>
-
 
     </View>
   );
@@ -37,24 +23,24 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "white",
+    backgroundColor: "#d4d4d4",
     padding: 20,
+  },
+  logo: {
+    width: 200,
+    height: 100,
+    marginBottom: 50,
+    resizeMode: "contain",
   },
   title: {
     fontSize: 25,
     fontWeight: "bold",
     marginBottom: 40,
   },
-  button: {
-    backgroundColor: "#492CFF",
-    padding: 15,
-    borderRadius: 5,
-    alignItems: "center",
-    width: "80%",
-    marginBottom: 20,
-  },
   buttonText: {
-    color: "white",
+    color: "#fff",
     fontWeight: "bold",
+    fontSize: 16,
+    marginLeft: 10,
   },
 });

@@ -7,6 +7,7 @@ import {
   Alert,
   StyleSheet,
   Button,
+  Image,
 } from "react-native";
 import api from "../axios/axios";
 
@@ -20,7 +21,7 @@ export default function Login({ navigation }) {
     await api.postLogin(user).then(
       (response) => {
         Alert.alert("OK", response.data.message);
-        navigation.navigate("Home"); // Redireciona para a tela Home após login
+        navigation.navigate("Home");
       },
       (error) => {
         console.log(error);
@@ -28,32 +29,30 @@ export default function Login({ navigation }) {
       }
     );
   }
+
   return (
     <View style={styles.container}>
+      <Image source={require("../img/logosenai.png")} style={styles.logo} />
       <Text style={styles.title}>Faça Login</Text>
       <TextInput
         placeholder="E-mail"
         value={user.email}
-        onChangeText={(value) => {
-          setUser({ ...user, email: value });
-        }}
+        onChangeText={(value) => setUser({ ...user, email: value })}
         style={styles.input}
       />
       <TextInput
         placeholder="Senha"
         value={user.password}
-        onChangeText={(value) => {
-          setUser({ ...user, password: value });
-        }}
+        onChangeText={(value) => setUser({ ...user, password: value })}
+        secureTextEntry
         style={styles.input}
       />
       <TouchableOpacity onPress={handleLogin} style={styles.button}>
         <Text style={styles.buttonText}>Entrar</Text>
       </TouchableOpacity>
-      <Button
-        title="Cadastro"
-        onPress={() => navigation.navigate("Cadastro")}
-      />
+      <TouchableOpacity onPress={() => navigation.navigate("Cadastro")}>
+        <Text style={styles.registerText}>Não tem cadastro? Cadastre-se</Text>
+      </TouchableOpacity>
     </View>
   );
 }
@@ -63,26 +62,45 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "white",
+    backgroundColor: "#d4d4d4",
     padding: 20,
   },
-  input: {
+  logo: {
     width: 200,
-    height: 40,
-    borderWidth: 1,
+    height: 100,
+    resizeMode: "contain",
     marginBottom: 20,
+  },
+  title: {
+    fontSize: 24,
+    fontWeight: "bold",
+    color: "black",
+    marginBottom: 20,
+  },
+  input: {
+    width: "90%",
+    height: 40,
+    backgroundColor: "white",
+    borderRadius: 5,
     paddingHorizontal: 10,
+    marginBottom: 15,
   },
   button: {
-    backgroundColor: "#492CFF",
+    backgroundColor: "#ff0000",
     padding: 10,
     borderRadius: 5,
     alignItems: "center",
-    width: "100%",
+    width: "30%",
+    marginBottom: 10,
   },
-  title: {
-    fontSize: 25,
+  buttonText: {
+    color: "#fff",
     fontWeight: "bold",
-    marginBottom: 20,
+    fontSize: 16,
+  },
+  registerText: {
+    color: "black",
+    marginTop: 10,
+    textDecorationLine: "underline",
   },
 });

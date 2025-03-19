@@ -7,6 +7,7 @@ import {
   Alert,
   StyleSheet,
   Button,
+  Image,
 } from "react-native";
 import api from "../axios/axios";
 
@@ -35,24 +36,28 @@ export default function Cadastro({ navigation }) {
 
   return (
     <View style={styles.container}>
+      <Image source={require("../img/logosenai.png")} style={styles.logo} />
       <Text style={styles.title}>Cadastre-se</Text>
       <TextInput
         placeholder="CPF"
         value={user.cpf}
         onChangeText={(value) => setUser({ ...user, cpf: value })}
         style={styles.input}
+        keyboardType="numeric"
       />
       <TextInput
         placeholder="E-mail"
         value={user.email}
         onChangeText={(value) => setUser({ ...user, email: value })}
         style={styles.input}
+        keyboardType="email-address"
       />
       <TextInput
         placeholder="Senha"
         value={user.password}
         onChangeText={(value) => setUser({ ...user, password: value })}
         style={styles.input}
+        secureTextEntry
       />
       <TextInput
         placeholder="Nome"
@@ -63,48 +68,66 @@ export default function Cadastro({ navigation }) {
       <TextInput
         placeholder="Data de Nascimento (DD-MM-AAAA)"
         value={user.data_nascimento}
-        onChangeText={(value) => setUser({ ...user, data_nascimento: value })}
+        onChangeText={(value) =>
+          setUser({ ...user, data_nascimento: value })
+        }
         style={styles.input}
         keyboardType="numeric"
       />
       <TouchableOpacity onPress={handleCadastro} style={styles.button}>
         <Text style={styles.buttonText}>Cadastrar</Text>
       </TouchableOpacity>
-      <Button title="Login" onPress={() => navigation.navigate("Login")} />
+      <TouchableOpacity onPress={() => navigation.navigate("Login")}>
+        <Text style={styles.loginText}>Já tem conta? Faça login</Text>
+      </TouchableOpacity>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "white",
-    padding: 20,
-  },
-  input: {
-    width: 200,
-    height: 40,
-    borderWidth: 1,
-    borderRadius: 5,
-    paddingHorizontal: 10,
-    marginBottom: 15,
-  },
-  button: {
-    backgroundColor: "#492CFF",
-    padding: 10,
-    borderRadius: 5,
-    alignItems: "center",
-    width: "80%",
-  },
-  buttonText: {
-    color: "white",
-    fontWeight: "bold",
-  },
-  title: {
-    fontSize: 25,
-    fontWeight: "bold",
-    marginBottom: 20,
-  },
-});
+      container: {
+      flex: 1,
+      justifyContent: "center",
+      alignItems: "center",
+      backgroundColor: "#d4d4d4",
+      padding: 20,
+    },
+    logo: {
+      width: 200,
+      height: 100,
+      resizeMode: "contain",
+      marginBottom: 20,
+    },
+    title: {
+      fontSize: 24,
+      fontWeight: "bold",
+      color: "black",
+      marginBottom: 20,
+    },
+    input: {
+      width: "90%",
+      height: 40,
+      backgroundColor: "white",
+      borderRadius: 5,
+      paddingHorizontal: 10,
+      marginBottom: 15,
+    },
+    button: {
+      backgroundColor: "#ff0000",
+      padding: 10,
+      borderRadius: 5,
+      alignItems: "center",
+      width: "30%",
+      marginBottom: 10,
+    },
+    buttonText: {
+      color: "#fff",
+      fontWeight: "bold",
+      fontSize: 16,
+    },
+    registerText: {
+      color: "black",
+      marginTop: 10,
+      textDecorationLine: "underline",
+    },
+  });
