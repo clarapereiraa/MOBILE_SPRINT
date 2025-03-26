@@ -6,28 +6,33 @@ import {
   TouchableOpacity,
   Alert,
   StyleSheet,
-  Button,
   Image,
 } from "react-native";
 import api from "../axios/axios";
+import { Ionicons } from "@expo/vector-icons";
 
 export default function Login({ navigation }) {
   const [user, setUser] = useState({
     email: "",
     password: "",
+    showPassword: false, 
   });
 
   async function handleLogin() {
-    await api.postLogin(user).then(
-      (response) => {
+    await api
+      .postLogin(user)
+      .then((response) => {
         Alert.alert("OK", response.data.message);
         navigation.navigate("Home");
-      },
-      (error) => {
+      })
+      .catch((error) => {
         console.log(error);
-        Alert.alert("Erro", error.response.data.error);
-      }
-    );
+        if (error.response && error.response.data && error.response.data.error) {
+          Alert.alert("Erro", error.response.data.error);
+        } else {
+          Alert.alert("Erro", "Ocorreu um erro inesperado.");
+        }
+      });
   }
 
   return (
@@ -40,13 +45,24 @@ export default function Login({ navigation }) {
         onChangeText={(value) => setUser({ ...user, email: value })}
         style={styles.input}
       />
-      <TextInput
-        placeholder="Senha"
-        value={user.password}
-        onChangeText={(value) => setUser({ ...user, password: value })}
-        secureTextEntry
-        style={styles.input}
-      />
+      <View style={styles.passwordContainer}>
+        <TextInput
+          placeholder="Senha"
+          value={user.password}
+          onChangeText={(value) => setUser({ ...user, password: value })}
+          secureTextEntry={user.showPassword}
+          style={styles.passwordInput}
+        />
+        <TouchableOpacity
+          onPress={() => setUser({ ...user, showPassword: !user.showPassword })}
+        >
+          <Ionicons
+            name={user.showPassword ? "eye-off" : "eye"}
+            size={24}
+            color="gray"
+          />
+        </TouchableOpacity>
+      </View>
       <TouchableOpacity onPress={handleLogin} style={styles.button}>
         <Text style={styles.buttonText}>Entrar</Text>
       </TouchableOpacity>
@@ -62,7 +78,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "#d4d4d4",
+    backgroundColor: "#E8E8E8",
     padding: 20,
   },
   logo: {
@@ -102,5 +118,19 @@ const styles = StyleSheet.create({
     color: "black",
     marginTop: 10,
     textDecorationLine: "underline",
+  },
+  passwordContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    width: "90%",
+    backgroundColor: "white",
+    borderRadius: 5,
+    paddingRight: 10,
+    marginBottom: 15,
+  },
+  passwordInput: {
+    flex: 1,
+    height: 40,
+    paddingHorizontal: 10,
   },
 });
