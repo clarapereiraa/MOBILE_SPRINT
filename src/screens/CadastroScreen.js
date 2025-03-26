@@ -16,9 +16,8 @@ export default function Cadastro({ navigation }) {
   const [user, setUser] = useState({
     cpf: "",
     email: "",
-    password: "",
-    name: "",
-    data_nascimento: "",
+    senha: "",
+    nome: "",
     showPassword: false,
   });
 
@@ -56,8 +55,8 @@ export default function Cadastro({ navigation }) {
       <View style={styles.passwordContainer}>
         <TextInput
           placeholder="Senha"
-          value={user.password}
-          onChangeText={(value) => setUser({ ...user, password: value })}
+          value={user.senha}
+          onChangeText={(value) => setUser({ ...user, senha: value })}
           style={styles.passwordInput}
           secureTextEntry={user.showPassword} // Usa o estado showPassword
         />
@@ -73,18 +72,9 @@ export default function Cadastro({ navigation }) {
       </View>
       <TextInput
         placeholder="Nome"
-        value={user.name}
-        onChangeText={(value) => setUser({ ...user, name: value })}
+        value={user.nome}
+        onChangeText={(value) => setUser({ ...user, nome: value })}
         style={styles.input}
-      />
-      <TextInput
-        placeholder="Data de Nascimento (DD-MM-AAAA)"
-        value={user.data_nascimento}
-        onChangeText={(value) =>
-          setUser({ ...user, data_nascimento: value })
-        }
-        style={styles.input}
-        keyboardType="numeric"
       />
       <TouchableOpacity onPress={handleCadastro} style={styles.button}>
         <Text style={styles.buttonText}>Cadastrar</Text>
@@ -101,7 +91,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "#d4d4d4",
+    backgroundColor: "#E8E8E8",
     padding: 20,
   },
   logo: {

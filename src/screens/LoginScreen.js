@@ -14,25 +14,21 @@ import { Ionicons } from "@expo/vector-icons";
 export default function Login({ navigation }) {
   const [user, setUser] = useState({
     email: "",
-    password: "",
+    senha: "",
     showPassword: false, 
   });
 
   async function handleLogin() {
-    await api
-      .postLogin(user)
-      .then((response) => {
+    await api.postLogin(user).then(
+      (response) => {
         Alert.alert("OK", response.data.message);
         navigation.navigate("Home");
-      })
-      .catch((error) => {
+      },
+      (error) => {
         console.log(error);
-        if (error.response && error.response.data && error.response.data.error) {
-          Alert.alert("Erro", error.response.data.error);
-        } else {
-          Alert.alert("Erro", "Ocorreu um erro inesperado.");
-        }
-      });
+        Alert.alert("Erro", error.response.data.error);
+      }
+    );
   }
 
   return (
@@ -48,8 +44,8 @@ export default function Login({ navigation }) {
       <View style={styles.passwordContainer}>
         <TextInput
           placeholder="Senha"
-          value={user.password}
-          onChangeText={(value) => setUser({ ...user, password: value })}
+          value={user.senha}
+          onChangeText={(value) => setUser({ ...user, senha: value })}
           secureTextEntry={user.showPassword}
           style={styles.passwordInput}
         />
