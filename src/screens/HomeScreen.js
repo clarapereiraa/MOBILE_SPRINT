@@ -6,7 +6,7 @@ import {
   Image 
 } from "react-native";
 
-export default function Home({ navigation }) {
+export default function Home() {
   return (
     <View style={styles.container}>
       {/* Logo do SENAI */}

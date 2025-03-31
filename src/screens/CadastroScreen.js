@@ -6,7 +6,6 @@ import {
   TouchableOpacity,
   Alert,
   StyleSheet,
-  Button,
   Image,
 } from "react-native";
 import api from "../axios/axios";
@@ -18,7 +17,7 @@ export default function Cadastro({ navigation }) {
     email: "",
     senha: "",
     nome: "",
-    showPassword: false,
+    showPassword: true,
   });
 
   async function handleCadastro() {
