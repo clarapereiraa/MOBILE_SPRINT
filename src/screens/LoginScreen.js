@@ -15,7 +15,7 @@ export default function Login({ navigation }) {
   const [user, setUser] = useState({
     email: "",
     senha: "",
-    showPassword: true, 
+    showPassword: true,
   });
 
   async function handleLogin() {
