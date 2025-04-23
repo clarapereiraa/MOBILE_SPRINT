@@ -15,7 +15,7 @@ export default function App() {
         <Stack.Screen name="Login" component={LoginScreen} />
         <Stack.Screen name="Cadastro" component={CadastroScreen} />
         <Stack.Screen name="Home" component={HomeScreen} />
-        <Stack.Screen name="Minhas Reservas" component={MinhasReservasScreen} /> {/* Registre a tela */}
+        <Stack.Screen name="Minhas Reservas" component={MinhasReservasScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );

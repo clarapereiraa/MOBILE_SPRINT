@@ -2,7 +2,8 @@ import React from "react";
 import { 
   View, 
   Text, 
-  StyleSheet, 
+  StyleSheet,
+  TouchableOpacity,
   Image 
 } from "react-native";
 import { MaterialIcons } from '@expo/vector-icons';
@@ -12,23 +13,26 @@ export default function Home() {
   const handlePressMinhasReservas = () => {
     navigation.navigate('Minhas Reservas')
   }
+  const handlePressSalas = () => {
+    navigation.navigate('Salas');
+  };
+
   return (
     <View style={styles.container}>
       {/* Logo do SENAI */}
       <Image source={require("../img/logosenai.png")} style={styles.logo} />
-    
-      
-      {/* Bloco 1 */}
-      <View style={styles.bloco}>
-     <MaterialIcons name="CalendarMonthIcon" size={24} color="#fff" />
-     <Text style={styles.buttonText}>Minhas Reservas</Text>
-     </View>
 
-      {/* Bloco 2 */}
-      <View style={styles.bloco}>
-        <MaterialIcons name="person" size={24} color="#fff" />
+      {/* Botão "Minhas Reservas" */}
+      <TouchableOpacity style={styles.button} onPress={handlePressMinhasReservas}>
+        <MaterialIcons name="calendar-today" size={45} color="#fff" />
+        <Text style={styles.buttonText}>Minhas Reservas</Text>
+      </TouchableOpacity>
+
+      {/* Botão "Salas" */}
+      <TouchableOpacity style={styles.button} onPress={handlePressSalas}>
+        <MaterialIcons name="meeting-room" size={45} color="#fff" />
         <Text style={styles.buttonText}>Salas</Text>
-      </View>
+      </TouchableOpacity>
 
     </View>
   );
@@ -57,17 +61,19 @@ const styles = StyleSheet.create({
   buttonText: {
     color: "#fff",
     fontWeight: "bold",
-    fontSize: 16,
+    fontSize: 20,
     marginLeft: 10,
   },
-  bloco: {
-    flexDirection: "row",
+  button: {
+    flexDirection: "column",
     alignItems: "center",
-    backgroundColor: "#D32F2F",
-    padding: 20,
+    backgroundColor: "#D32F2F", // Cor vermelha
+    padding: 45,
     borderRadius: 10,
-    marginVertical: 10,
-    width: "100%",
+    marginVertical: 20,
+    width: 200,
+    height: 200, 
     maxWidth: 300,
+    justifyContent: "center", // Centralizando os itens no botão
   },
 });
