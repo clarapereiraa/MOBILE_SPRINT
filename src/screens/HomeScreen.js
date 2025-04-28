@@ -9,7 +9,7 @@ import {
 import { MaterialIcons } from '@expo/vector-icons';
 
 
-export default function Home() {
+export default function Home({navigation}) {
   const handlePressMinhasReservas = () => {
     navigation.navigate('Minhas Reservas')
   }
@@ -23,13 +23,13 @@ export default function Home() {
       <Image source={require("../img/logosenai.png")} style={styles.logo} />
 
       {/* Botão "Minhas Reservas" */}
-      <TouchableOpacity style={styles.button} onPress={handlePressMinhasReservas}>
+      <TouchableOpacity style={styles.button} onPress={()=> navigation.navigate('Minhas Reservas')}>
         <MaterialIcons name="calendar-today" size={45} color="#fff" />
         <Text style={styles.buttonText}>Minhas Reservas</Text>
       </TouchableOpacity>
 
       {/* Botão "Salas" */}
-      <TouchableOpacity style={styles.button} onPress={handlePressSalas}>
+      <TouchableOpacity style={styles.button} onPress={()=> navigation.navigate('Salas')}>
         <MaterialIcons name="meeting-room" size={45} color="#fff" />
         <Text style={styles.buttonText}>Salas</Text>
       </TouchableOpacity>

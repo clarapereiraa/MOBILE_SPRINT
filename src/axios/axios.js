@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const api = axios.create({
-  baseURL: "http://10.89.240.72:5000/api/v1/",
+  baseURL: "http://10.89.240.81:5000/api/v1/",
   headers: {
     accept: "application/json",
   },
@@ -10,6 +10,7 @@ const api = axios.create({
 const sheets = {
   postCadastro: (user) => api.post("user/", user),
   postLogin: (user) => api.post("userLogin/", user),
+  getAllSalasA: () => api.get("/blocoA/"),
 };
 
-export default sheets
+export default sheets;
