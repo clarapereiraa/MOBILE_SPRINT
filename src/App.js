@@ -7,6 +7,9 @@ import HomeScreen from './screens/HomeScreen';
 import MinhasReservasScreen from './screens/MinhasReservasScreen';
 import SalasScreen from './screens/SalasScreen';
 import BlocoAScreen from './screens/BlocoAScreen';
+import BlocoBScreen from './screens/BlocoBScreen';
+import BlocoCScreen from './screens/BlocoCScreen';
+import BlocoDScreen from './screens/BlocoDScreen';
 
 const Stack = createStackNavigator();
 
@@ -20,6 +23,9 @@ export default function App() {
         <Stack.Screen name="Minhas Reservas" component={MinhasReservasScreen} />
         <Stack.Screen name="Salas" component={SalasScreen} />
         <Stack.Screen name="Bloco A" component={BlocoAScreen} />
+        <Stack.Screen name="Bloco B" component={BlocoBScreen} />
+        <Stack.Screen name="Bloco C" component={BlocoCScreen} />
+        <Stack.Screen name="Bloco D" component={BlocoDScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );

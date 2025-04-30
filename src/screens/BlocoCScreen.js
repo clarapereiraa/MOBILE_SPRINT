@@ -12,21 +12,21 @@ import {
   TextInput,
 } from "react-native";
 
-export default function BlocoAScreen({ navigation }) {
-  const [salasA, setSalasA] = useState([]);
+export default function BlocoCScreen({ navigation }) {
+  const [salasC, setSalasC] = useState([]);
   const [reservas, setReservas] = useState([]);
   const [modalVisible, setModalVisible] = useState(false);
   const [loading, setLoading] = useState(true);
   const [salaSelecionada, setSalaSelecionada] = useState({});
   const [usuarioSelecionado, setUsuarioSelecionado] = useState({
-    id_usuario: "1", // Substitua por um valor real se tiver login
-    nome: "Usuário Exemplo",
+    id_usuario: "", // Substitua por um valor real se tiver login
+    nome: "Usuário Exemplo"
   });
   const [novaReserva, setNovaReserva] = useState({
     fk_id_usuario: "",
     fk_id_sala: "",
     datahora_inicio: "",
-    datahora_fim: "",
+    datahora_fim: ""
   });
 
   async function criarReserva() {
@@ -35,35 +35,33 @@ export default function BlocoAScreen({ navigation }) {
         fk_id_usuario: usuarioSelecionado.id_usuario,
         fk_id_sala: salaSelecionada.id_sala,
         datahora_inicio: novaReserva.datahora_inicio,
-        datahora_fim: novaReserva.datahora_fim,
+        datahora_fim: novaReserva.datahora_fim
       });
 
-      Alert.alert("Sucesso", "Reserva criada com sucesso!");
+      Alert.alert("Reserva criada com sucesso!");
 
-      const responseAtualizado = await api.getReservasPorSala(
-        salaSelecionada.id_sala
-      );
+      const responseAtualizado = await api.getReservasPorSala(salaSelecionada.id_sala);
       setReservas(responseAtualizado.data.reserva);
 
       setNovaReserva({
         fk_id_usuario: "",
         fk_id_sala: "",
         datahora_inicio: "",
-        datahora_fim: "",
+        datahora_fim: ""
       });
     } catch (error) {
-      
+      Alert.alert(error.response.data.error);
     }
   }
 
   useEffect(() => {
-    getAllSalasA();
+    getAllSalasC();
   }, []);
 
-  async function getAllSalasA() {
+  async function getAllSalasC() {
     try {
-      const response = await api.getAllSalasA();
-      setSalasA(response.data.salas);
+      const response = await api.getAllSalasC();
+      setSalasC(response.data.salas);
       setLoading(false);
     } catch (error) {
       console.log(error.response.data.error || "Erro ao buscar salas");
@@ -73,25 +71,13 @@ export default function BlocoAScreen({ navigation }) {
   async function abrirModalComReserva(sala) {
     setSalaSelecionada(sala);
     setModalVisible(true);
-    setNovaReserva((prev) => ({
-      ...prev,
-      fk_id_sala: sala.id_sala,
-    }));
     try {
-      const response = await api.getAllReservas();
-      const reservasSalaSelecionada = []
-      response.data.reservas.forEach(reserva => {
-        // FILTRAR AS RESERVAS DENTRE AS QUAIS SÃO SOMENTE DA SALA SELECIONADA
-        if(reserva.fk_id_sala===salaSelecionada.id_sala){
-          reservasSalaSelecionada.push(reserva)
-        }
-      });
-      setReservas(reservasSalaSelecionada);
+      const response = await api.getReservasPorSala(sala.id_sala);
+      setReservas(response.data.reserva);
     } catch (error) {
-      
+      Alert.alert("Erro ao buscar reservas");
     }
   }
-  
 
   return (
     <View style={styles.container}>
@@ -101,7 +87,7 @@ export default function BlocoAScreen({ navigation }) {
         <ActivityIndicator size="large" color="blue" />
       ) : (
         <FlatList
-          data={salasA}
+          data={salasC}
           keyExtractor={(item, index) => item.classificacao || index.toString()}
           renderItem={({ item }) => (
             <TouchableOpacity
@@ -137,9 +123,7 @@ export default function BlocoAScreen({ navigation }) {
               renderItem={({ item }) => (
                 <View style={styles.reservaItem}>
                   <Text>{item.nome_usuario}</Text>
-                  <Text>
-                    {new Date(item.data_reserva).toLocaleString("pt-BR")}
-                  </Text>
+                  <Text>{new Date(item.data_reserva).toLocaleString("pt-BR")}</Text>
                 </View>
               )}
             />
@@ -149,25 +133,6 @@ export default function BlocoAScreen({ navigation }) {
             Criar nova reserva
           </Text>
           <TextInput
-            placeholder="ID do Usuário"
-            style={styles.input}
-            keyboardType="numeric"
-            value={novaReserva.fk_id_usuario.toString()}
-            onChangeText={(text) =>
-              setNovaReserva({ ...novaReserva, fk_id_usuario: text })
-            }
-          />
-
-          {/* Campo de ID da Sala (preenchido automaticamente ao abrir o modal) */}
-          <TextInput
-            placeholder="ID da Sala"
-            style={styles.input}
-            value={salaSelecionada.id_sala?.toString() || ""}
-            editable={false}
-          />
-
-          {/* Campo de Data/Hora Início */}
-          <TextInput
             placeholder="Data/Hora Início (AAAA-MM-DD HH:mm:ss)"
             style={styles.input}
             value={novaReserva.datahora_inicio}
@@ -175,8 +140,6 @@ export default function BlocoAScreen({ navigation }) {
               setNovaReserva({ ...novaReserva, datahora_inicio: text })
             }
           />
-
-          {/* Campo de Data/Hora Fim */}
           <TextInput
             placeholder="Data/Hora Fim (AAAA-MM-DD HH:mm:ss)"
             style={styles.input}
