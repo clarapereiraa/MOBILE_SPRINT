@@ -1,41 +1,30 @@
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 
-export default function SalasScreen({navigation}) {
-    const handlePressBlocoA = () => {
-        navigation.navigate('Bloco A')
-      }
-      const handlePressBlocoB = () => {
-        navigation.navigate('Bloco B');
-      }
-      const handlePressBlocoC = () => {
-        navigation.navigate('Bloco C')
-      }
-      const handlePressBlocoD = () => {
-        navigation.navigate('Bloco D')
-      };
+export default function SalasScreen({navigation, route }) {
+  const { user } = route.params;
 
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Escolha o bloco</Text>
 
         {/* Botão "Bloco A" */}
-      <TouchableOpacity style={styles.button} onPress={()=> navigation.navigate('Bloco A')}>
+      <TouchableOpacity style={styles.button} onPress={()=> navigation.navigate('Bloco A', {user})}>
         <Text style={styles.buttonText}>A</Text>
       </TouchableOpacity>
 
       {/* Botão "Bloco B" */}
-      <TouchableOpacity style={styles.button} onPress={()=> navigation.navigate('Bloco B')}>
+      <TouchableOpacity style={styles.button} onPress={()=> navigation.navigate('Bloco B', {user})}>
         <Text style={styles.buttonText}>B</Text>
       </TouchableOpacity>
 
       {/* Botão "Bloco C" */}
-      <TouchableOpacity style={styles.button} onPress={()=> navigation.navigate('Bloco C')}>
+      <TouchableOpacity style={styles.button} onPress={()=> navigation.navigate('Bloco C', {user})}>
         <Text style={styles.buttonText}>C</Text>
       </TouchableOpacity>
 
-      {/* Botão "Bloco B" */}
-      <TouchableOpacity style={styles.button} onPress={()=> navigation.navigate('Bloco D')}>
+      {/* Botão "Bloco D" */}
+      <TouchableOpacity style={styles.button} onPress={()=> navigation.navigate('Bloco D', {user})}>
         <Text style={styles.buttonText}>D</Text>
       </TouchableOpacity>
 

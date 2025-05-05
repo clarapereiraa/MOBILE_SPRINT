@@ -9,13 +9,8 @@ import {
 import { MaterialIcons } from '@expo/vector-icons';
 
 
-export default function Home({navigation}) {
-  const handlePressMinhasReservas = () => {
-    navigation.navigate('Minhas Reservas')
-  }
-  const handlePressSalas = () => {
-    navigation.navigate('Salas');
-  };
+export default function Home({navigation, route}) {
+  const { user } = route.params;
 
   return (
     <View style={styles.container}>
@@ -23,13 +18,13 @@ export default function Home({navigation}) {
       <Image source={require("../img/logosenai.png")} style={styles.logo} />
 
       {/* Botão "Minhas Reservas" */}
-      <TouchableOpacity style={styles.button} onPress={()=> navigation.navigate('Minhas Reservas')}>
+      <TouchableOpacity style={styles.button} onPress={()=> navigation.navigate('Minhas Reservas', {user})}>
         <MaterialIcons name="calendar-today" size={45} color="#fff" />
         <Text style={styles.buttonText}>Minhas Reservas</Text>
       </TouchableOpacity>
 
       {/* Botão "Salas" */}
-      <TouchableOpacity style={styles.button} onPress={()=> navigation.navigate('Salas')}>
+      <TouchableOpacity style={styles.button} onPress={()=> navigation.navigate('Salas', {user})}>
         <MaterialIcons name="meeting-room" size={45} color="#fff" />
         <Text style={styles.buttonText}>Salas</Text>
       </TouchableOpacity>
@@ -54,6 +49,7 @@ const styles = StyleSheet.create({
     resizeMode: "contain",
   },
   title: {
+    flexDirection: 'row',
     fontSize: 25,
     fontWeight: "bold",
     marginBottom: 40,

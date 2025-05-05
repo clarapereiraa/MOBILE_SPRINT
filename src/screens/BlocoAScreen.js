@@ -11,17 +11,15 @@ import {
   Alert,
   TextInput,
 } from "react-native";
+import { MaterialIcons } from '@expo/vector-icons';
 
-export default function BlocoAScreen({ navigation }) {
+export default function BlocoAScreen({ route }) {
+  const { user } = route.params;
   const [salasA, setSalasA] = useState([]);
   const [reservas, setReservas] = useState([]);
   const [modalVisible, setModalVisible] = useState(false);
   const [loading, setLoading] = useState(true);
   const [salaSelecionada, setSalaSelecionada] = useState({});
-  const [usuarioSelecionado, setUsuarioSelecionado] = useState({
-    id_usuario: "1", // Substitua por um valor real se tiver login
-    nome: "Usuário Exemplo",
-  });
   const [novaReserva, setNovaReserva] = useState({
     fk_id_usuario: "",
     fk_id_sala: "",
@@ -30,20 +28,23 @@ export default function BlocoAScreen({ navigation }) {
   });
 
   async function criarReserva() {
+    console.log(
+      {
+        fk_id_usuario: user.id_usuario,
+        fk_id_sala: salaSelecionada.id_sala,
+        datahora_inicio: novaReserva.datahora_inicio,
+        datahora_fim: novaReserva.datahora_fim,
+      }
+     )
     try {
       const response = await api.createReserva({
-        fk_id_usuario: usuarioSelecionado.id_usuario,
+        fk_id_usuario: user.id_usuario,
         fk_id_sala: salaSelecionada.id_sala,
         datahora_inicio: novaReserva.datahora_inicio,
         datahora_fim: novaReserva.datahora_fim,
       });
-
-      Alert.alert("Sucesso", "Reserva criada com sucesso!");
-
-      const responseAtualizado = await api.getReservasPorSala(
-        salaSelecionada.id_sala
-      );
-      setReservas(responseAtualizado.data.reserva);
+      abrirModalComReserva(salaSelecionada)
+      Alert.alert("Sucesso", response.data.message);
 
       setNovaReserva({
         fk_id_usuario: "",
@@ -52,7 +53,7 @@ export default function BlocoAScreen({ navigation }) {
         datahora_fim: "",
       });
     } catch (error) {
-      
+      Alert.alert("Erro", error.response.data.error);
     }
   }
 
@@ -72,37 +73,39 @@ export default function BlocoAScreen({ navigation }) {
 
   async function abrirModalComReserva(sala) {
     setSalaSelecionada(sala);
-    setModalVisible(true);
     setNovaReserva((prev) => ({
       ...prev,
       fk_id_sala: sala.id_sala,
     }));
+    setReservas([]);
     try {
       const response = await api.getAllReservas();
-      const reservasSalaSelecionada = []
-      response.data.reservas.forEach(reserva => {
+      const reservasSalaSelecionada = [];
+      response.data.reservas.forEach((reservaFiltro) => {
         // FILTRAR AS RESERVAS DENTRE AS QUAIS SÃO SOMENTE DA SALA SELECIONADA
-        if(reserva.fk_id_sala===salaSelecionada.id_sala){
-          reservasSalaSelecionada.push(reserva)
+        if (reservaFiltro.fk_id_sala === sala.id_sala) {
+          reservasSalaSelecionada.push(reservaFiltro);
+          console.log(reservaFiltro)
         }
       });
       setReservas(reservasSalaSelecionada);
+      setModalVisible(true);
     } catch (error) {
-      
+      console.log(error);
     }
   }
-  
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Salas Disponíveis</Text>
+      <Text style={styles.title}>A</Text> 
+      <MaterialIcons style={styles.title} name="calendar-today" size={50} color="#fff" />
 
       {loading ? (
         <ActivityIndicator size="large" color="blue" />
       ) : (
         <FlatList
           data={salasA}
-          keyExtractor={(item, index) => item.classificacao || index.toString()}
+          keyExtractor={(item) => item.classificacao}
           renderItem={({ item }) => (
             <TouchableOpacity
               style={styles.salaCard}
@@ -118,7 +121,10 @@ export default function BlocoAScreen({ navigation }) {
 
       <Modal
         visible={modalVisible}
-        onRequestClose={() => setModalVisible(false)}
+        onRequestClose={() => {
+          setModalVisible(false);
+          setReservas([]); // Limpa as reservas
+        }}
         animationType="slide"
       >
         <View style={styles.modalContainer}>
@@ -131,14 +137,15 @@ export default function BlocoAScreen({ navigation }) {
           ) : (
             <FlatList
               data={reservas}
-              keyExtractor={(item, index) =>
-                item.id_sala.toString() || index.toString()
-              }
+              keyExtractor={(item) => item.id_reserva}
               renderItem={({ item }) => (
                 <View style={styles.reservaItem}>
-                  <Text>{item.nome_usuario}</Text>
+                  <Text>{item.nome}</Text>
                   <Text>
-                    {new Date(item.data_reserva).toLocaleString("pt-BR")}
+                    {new Date(item.datahora_inicio).toLocaleString("pt-BR")}
+                  </Text>
+                  <Text>
+                    {new Date(item.datahora_fim).toLocaleString("pt-BR")}
                   </Text>
                 </View>
               )}
@@ -148,25 +155,8 @@ export default function BlocoAScreen({ navigation }) {
           <Text style={{ marginTop: 20, fontWeight: "bold" }}>
             Criar nova reserva
           </Text>
-          <TextInput
-            placeholder="ID do Usuário"
-            style={styles.input}
-            keyboardType="numeric"
-            value={novaReserva.fk_id_usuario.toString()}
-            onChangeText={(text) =>
-              setNovaReserva({ ...novaReserva, fk_id_usuario: text })
-            }
-          />
 
-          {/* Campo de ID da Sala (preenchido automaticamente ao abrir o modal) */}
-          <TextInput
-            placeholder="ID da Sala"
-            style={styles.input}
-            value={salaSelecionada.id_sala?.toString() || ""}
-            editable={false}
-          />
-
-          {/* Campo de Data/Hora Início */}
+          {/* Aqui eu preciso de um outro component aonde o usuário só selecione a data e hora, sem precisar digitar */} 
           <TextInput
             placeholder="Data/Hora Início (AAAA-MM-DD HH:mm:ss)"
             style={styles.input}
@@ -185,7 +175,7 @@ export default function BlocoAScreen({ navigation }) {
               setNovaReserva({ ...novaReserva, datahora_fim: text })
             }
           />
-          <TouchableOpacity style={styles.reserveButton} onPress={criarReserva}>
+          <TouchableOpacity style={styles.reserveButton} onPress={()=>criarReserva()}>
             <Text style={{ color: "white" }}>Reservar</Text>
           </TouchableOpacity>
 
@@ -204,13 +194,16 @@ export default function BlocoAScreen({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    flexDirection: 'row',
     padding: 20,
     paddingTop: 50,
+    justifyContent: 'center',
+    alignItems: 'flex-start' ,
   },
   title: {
     fontSize: 22,
     fontWeight: "bold",
-    marginBottom: 20,
+    marginBottom: 30,
   },
   salaCard: {
     padding: 15,
@@ -247,14 +240,14 @@ const styles = StyleSheet.create({
   },
   reserveButton: {
     marginTop: 15,
-    backgroundColor: "green",
+    backgroundColor: "red",
     padding: 10,
     alignItems: "center",
     borderRadius: 6,
   },
   closeButton: {
     marginTop: 20,
-    backgroundColor: "blue",
+    backgroundColor: "red",
     padding: 10,
     alignItems: "center",
     borderRadius: 6,

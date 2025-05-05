@@ -11,6 +11,9 @@ const sheets = {
   postCadastro: (user) => api.post("user/", user),
   postLogin: (user) => api.post("userLogin/", user),
   getAllSalasA: () => api.get("/blocoA/"),
+  getAllSalasB: () => api.get("/blocoB/"),
+  getAllSalasC: () => api.get("/blocoC/"),
+  getAllSalasD: () => api.get("/blocoD/"),
   getAllReservas: () => api.get(`reserva/`),
   createReserva: (reserva) => api.post("/reserva", reserva)
 };
