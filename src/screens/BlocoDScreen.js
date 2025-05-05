@@ -240,14 +240,14 @@ const styles = StyleSheet.create({
   },
   reserveButton: {
     marginTop: 15,
-    backgroundColor: "green",
+    backgroundColor: "red",
     padding: 10,
     alignItems: "center",
     borderRadius: 6,
   },
   closeButton: {
     marginTop: 20,
-    backgroundColor: "blue",
+    backgroundColor: "red",
     padding: 10,
     alignItems: "center",
     borderRadius: 6,
