@@ -9,23 +9,25 @@ import {
 } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import api from '../axios/axios'; // Utilizando o arquivo de API
-import { useNavigation } from '@react-navigation/native';
 
-const MinhasReservasScreen = () => {
+
+export default function MinhasReservasScreen({navigation, route}) {
   const [reservas, setReservas] = useState([]);
-  const navigation = useNavigation();
+  const { user } = route.params;
 
   useEffect(() => {
-    carregarReservas();
+    //carregarReservas();
+    
   }, []);
 
   const carregarReservas = async () => {
     try {
-      const token = await api.getItem('token');
-      const response = await api.getAllReservas(); 
-      setReservas(response.data.reservas); 
+      //const token = await api.getItem('token');
+      console.log("Testando params: ", user)
+      const response = await api.getReservaByUsuario(user.id_usuario); 
+      setReservas(response.data.reservas);      
     } catch (error) {
-      console.error('Erro ao buscar reservas:', error);
+      console.log('Erro ao buscar reservas:', error);
     }
   };
 
@@ -36,7 +38,7 @@ const MinhasReservasScreen = () => {
       Alert.alert('Sucesso', 'Reserva excluída!');
       carregarReservas(); 
     } catch (error) {
-      console.error('Erro ao excluir reserva:', error);
+      console.log('Erro ao excluir reserva:', error);
     }
   };
 
@@ -81,7 +83,6 @@ const MinhasReservasScreen = () => {
   );
 };
 
-export default MinhasReservasScreen;
 
 const styles = StyleSheet.create({
   container: {

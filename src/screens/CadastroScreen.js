@@ -21,16 +21,15 @@ export default function Cadastro({ navigation }) {
   });
 
   async function handleCadastro() {
-    await api
-      .postCadastro(user)
-      .then((response) => {
-        console.log(response.data.message);
-        Alert.alert(response.data.message);
-      })
-      .catch((error) => {
-        console.log(error);
+    await api.postCadastro(user).then(
+      (response) => {
+        Alert.alert("Sucesso", response.data.message);
+        navigation.navigate("Home");
+      },
+      (error) => {
         Alert.alert("Erro", error.response.data.error);
-      });
+      }
+    );
   }
 
   return (

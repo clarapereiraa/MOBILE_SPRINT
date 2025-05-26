@@ -22,6 +22,7 @@ export default function Login({ navigation }) {
     await api.postLogin(user).then(
       (response) => {
         Alert.alert("OK", response.data.message);
+        //console.log("Aqui......", response.data.user.id_usuario);
         navigation.navigate("Home",{user:response.data.user});
       },
       (error) => {

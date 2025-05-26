@@ -43,7 +43,7 @@ const styles = StyleSheet.create({
   },
   logo: {
     width: 200,
-    height: 200,
+    height: 100,
     marginBottom: 20,
     marginTop: 40,
     resizeMode: "contain",
@@ -63,13 +63,13 @@ const styles = StyleSheet.create({
   button: {
     flexDirection: "column",
     alignItems: "center",
-    backgroundColor: "#D32F2F", // Cor vermelha
+    backgroundColor: "#D32F2F", 
     padding: 45,
     borderRadius: 10,
     marginVertical: 20,
     width: 200,
     height: 200, 
     maxWidth: 300,
-    justifyContent: "center", // Centralizando os itens no botão
+    justifyContent: "center", 
   },
 });
