@@ -9,7 +9,7 @@ import {
   Image,
 } from "react-native";
 import api from "../axios/axios";
-import { Ionicons } from "@expo/vector-icons"; // Importe o Ionicons
+import { Ionicons } from "@expo/vector-icons";
 
 export default function Cadastro({ navigation }) {
   const [user, setUser] = useState({
@@ -21,15 +21,26 @@ export default function Cadastro({ navigation }) {
   });
 
   async function handleCadastro() {
-    await api.postCadastro(user).then(
-      (response) => {
-        Alert.alert("Sucesso", response.data.message);
-        navigation.navigate("Home");
-      },
-      (error) => {
-        Alert.alert("Erro", error.response.data.error);
-      }
-    );
+    try {
+      const response = await api.postCadastro({
+        cpf: user.cpf,
+        email: user.email,
+        senha: user.senha,
+        nome: user.nome,
+      });
+
+      Alert.alert("Sucesso", response.data.message, [
+        {
+          text: "OK",
+          onPress: () => navigation.navigate("Home", { user }),
+        },
+      ]);
+    } catch (error) {
+      Alert.alert(
+        "Erro",
+        error?.response?.data?.error || "Erro ao cadastrar usuário"
+      );
+    }
   }
 
   return (
@@ -56,10 +67,12 @@ export default function Cadastro({ navigation }) {
           value={user.senha}
           onChangeText={(value) => setUser({ ...user, senha: value })}
           style={styles.passwordInput}
-          secureTextEntry={user.showPassword} // Usa o estado showPassword
+          secureTextEntry={user.showPassword}
         />
         <TouchableOpacity
-          onPress={() => setUser({ ...user, showPassword: !user.showPassword })}
+          onPress={() =>
+            setUser({ ...user, showPassword: !user.showPassword })
+          }
         >
           <Ionicons
             name={user.showPassword ? "eye-off" : "eye"}

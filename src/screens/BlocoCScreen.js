@@ -79,7 +79,7 @@ export default function BlocoCScreen({ route }) {
     }));
     setReservas([]);
     try {
-      const response = await api.getAllReservas();
+      const response = await api.getAllReserva();
       const reservasSalaSelecionada = [];
       response.data.reservas.forEach((reservaFiltro) => {
         // FILTRAR AS RESERVAS DENTRE AS QUAIS SÃO SOMENTE DA SALA SELECIONADA

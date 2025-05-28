@@ -1,4 +1,5 @@
 import axios from "axios";
+import * as SecureStore from "expo-secure-store";
 
 const api = axios.create({
   baseURL: "http://10.89.240.66:5000/api/v1/",
@@ -7,6 +8,17 @@ const api = axios.create({
   },
 });
 
+api.interceptors.request.use(
+  async (config) => {
+    const token = await SecureStore.getItemAsync("token");
+    if (token) {
+      config.headers.Authorization = `${token}`;
+    }
+    return config;
+  },
+  (error) => Promise.reject(error)
+);
+
 const sheets = {
   postCadastro: (user) => api.post("user/", user),
   postLogin: (user) => api.post("userLogin/", user),
@@ -14,9 +26,9 @@ const sheets = {
   getAllSalasB: () => api.get("/blocoB/"),
   getAllSalasC: () => api.get("/blocoC/"),
   getAllSalasD: () => api.get("/blocoD/"),
-  getAllReservas: () => api.get(`reserva/`),
-  getReservaByUsuario:(id_usuario)=>api.get(`reserva/:id${id_usuario}`),
-  createReserva: (reserva) => api.post("/reserva", reserva)
+  getAllReserva: () => api.get(`reserva/`),
+  getReservaByUsuario: (usuarioId) => api.get(`/reserva/${usuarioId}`),
+  createReserva: (reserva) => api.post("/reserva", reserva),
 };
 
 export default sheets;
