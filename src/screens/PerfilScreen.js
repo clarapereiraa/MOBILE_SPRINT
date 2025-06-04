@@ -1,6 +1,7 @@
 import React from "react";
-import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
+import { View, Text, StyleSheet, TouchableOpacity, Alert } from "react-native";
 import Icon from "react-native-vector-icons/FontAwesome";
+import api from "../axios/axios";
 
 export default function PerfilScreen({ route, navigation }) {
   const { user } = route.params || {};
@@ -14,6 +15,38 @@ export default function PerfilScreen({ route, navigation }) {
       </View>
     );
   }
+
+  const excluirUsuario = async (id) => {
+    try {
+      await api.delete(`/usuario/${id}`);
+      Alert.alert("Sucesso", "Usuário excluído com sucesso.");
+      navigation.reset({
+        index: 0,
+        routes: [{ name: "Login" }],
+      });
+    } catch (error) {
+      console.log(
+        "Erro ao excluir usuário:",
+        error.response?.data?.error || error.message
+      );
+      Alert.alert("Erro", "Não foi possível excluir o usuário.");
+    }
+  };
+
+  const confirmarExclusaoUsuario = (id) => {
+    Alert.alert(
+      "Confirmar exclusão",
+      "Tem certeza de que deseja excluir sua conta?",
+      [
+        { text: "Cancelar", style: "cancel" },
+        {
+          text: "Excluir",
+          onPress: () => excluirUsuario(id),
+          style: "destructive",
+        },
+      ]
+    );
+  };
 
   return (
     <View style={styles.container}>
@@ -49,6 +82,14 @@ export default function PerfilScreen({ route, navigation }) {
           </TouchableOpacity>
         </View>
       </View>
+
+      {/* Botão de excluir conta */}
+      <TouchableOpacity
+        style={styles.botaoExcluir}
+        onPress={() => confirmarExclusaoUsuario(user.id_usuario)}
+      >
+        <Text style={styles.textoBotaoExcluir}>Excluir Conta</Text>
+      </TouchableOpacity>
     </View>
   );
 }
@@ -100,5 +141,18 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     alignItems: "center",
     marginTop: 10,
+  },
+  botaoExcluir: {
+    marginTop: 20,
+    backgroundColor: "red",
+    padding: 12,
+    borderRadius: 8,
+    width: "85%",
+  },
+  textoBotaoExcluir: {
+    color: "white",
+    fontWeight: "bold",
+    textAlign: "center",
+    fontSize: 16,
   },
 });
