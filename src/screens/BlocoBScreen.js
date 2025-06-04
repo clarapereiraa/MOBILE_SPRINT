@@ -11,7 +11,8 @@ import {
   Alert,
   TextInput,
 } from "react-native";
-import { MaterialIcons } from '@expo/vector-icons';
+import { MaterialIcons } from "@expo/vector-icons";
+import DateTimePicker from "../components/DateTimePicker";
 
 export default function BlocoBScreen({ route }) {
   const { user } = route.params;
@@ -28,14 +29,12 @@ export default function BlocoBScreen({ route }) {
   });
 
   async function criarReserva() {
-    console.log(
-      {
-        fk_id_usuario: user.id_usuario,
-        fk_id_sala: salaSelecionada.id_sala,
-        datahora_inicio: novaReserva.datahora_inicio,
-        datahora_fim: novaReserva.datahora_fim,
-      }
-     )
+    console.log({
+      fk_id_usuario: user.id_usuario,
+      fk_id_sala: salaSelecionada.id_sala,
+      datahora_inicio: novaReserva.datahora_inicio,
+      datahora_fim: novaReserva.datahora_fim,
+    });
     try {
       const response = await api.createReserva({
         fk_id_usuario: user.id_usuario,
@@ -43,7 +42,7 @@ export default function BlocoBScreen({ route }) {
         datahora_inicio: novaReserva.datahora_inicio,
         datahora_fim: novaReserva.datahora_fim,
       });
-      abrirModalComReserva(salaSelecionada)
+      abrirModalComReserva(salaSelecionada);
       Alert.alert("Sucesso", response.data.message);
 
       setNovaReserva({
@@ -85,7 +84,7 @@ export default function BlocoBScreen({ route }) {
         // FILTRAR AS RESERVAS DENTRE AS QUAIS SÃO SOMENTE DA SALA SELECIONADA
         if (reservaFiltro.fk_id_sala === sala.id_sala) {
           reservasSalaSelecionada.push(reservaFiltro);
-          console.log(reservaFiltro)
+          console.log(reservaFiltro);
         }
       });
       setReservas(reservasSalaSelecionada);
@@ -98,7 +97,12 @@ export default function BlocoBScreen({ route }) {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>B</Text>
-      <MaterialIcons style={styles.title} name="calendar-today" size={50} color="#fff" />
+      <MaterialIcons
+        style={styles.title}
+        name="calendar-today"
+        size={50}
+        color="#fff"
+      />
 
       {loading ? (
         <ActivityIndicator size="large" color="blue" />
@@ -156,24 +160,29 @@ export default function BlocoBScreen({ route }) {
             Criar nova reserva
           </Text>
 
-          {/* Aqui eu preciso de um outro component aonde o usuário só selecione a data e hora, sem precisar digitar */} 
-          <TextInput
-            placeholder="Data/Hora Início (AAAA-MM-DD HH:mm:ss)"
-            style={styles.input}
-            value={novaReserva.datahora_inicio}
-            onChangeText={(text) =>
-              setNovaReserva({ ...novaReserva, datahora_inicio: text })
+          <DateTimePicker
+            type="datetime"
+            buttonTitle={
+              novaReserva.datahora_inicio
+                ? `Início: ${new Date(
+                    novaReserva.datahora_inicio
+                  ).toLocaleString("pt-BR")}`
+                : "Selecionar Início"
             }
+            dateKey="datahora_inicio"
+            setValue={setNovaReserva}
           />
-
-          {/* Campo de Data/Hora Fim */}
-          <TextInput
-            placeholder="Data/Hora Fim (AAAA-MM-DD HH:mm:ss)"
-            style={styles.input}
-            value={novaReserva.datahora_fim}
-            onChangeText={(text) =>
-              setNovaReserva({ ...novaReserva, datahora_fim: text })
+          <DateTimePicker
+            type="datetime"
+            buttonTitle={
+              novaReserva.datahora_fim
+                ? `Fim: ${new Date(novaReserva.datahora_fim).toLocaleString(
+                    "pt-BR"
+                  )}`
+                : "Selecionar Fim"
             }
+            dateKey="datahora_fim"
+            setValue={setNovaReserva}
           />
           <TouchableOpacity style={styles.reserveButton} onPress={()=>criarReserva()}>
             <Text style={{ color: "white" }}>Reservar</Text>
@@ -194,11 +203,11 @@ export default function BlocoBScreen({ route }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    flexDirection: 'row',
+    flexDirection: "row",
     padding: 20,
     paddingTop: 50,
-    justifyContent: 'center',
-    alignItems: 'flex-start' ,
+    justifyContent: "center",
+    alignItems: "flex-start",
   },
   title: {
     fontSize: 22,

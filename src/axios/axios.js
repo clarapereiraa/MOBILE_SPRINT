@@ -29,6 +29,8 @@ const sheets = {
   getAllReserva: () => api.get(`reserva/`),
   getReservaByUsuario: (usuarioId) => api.get(`/reserva/${usuarioId}`),
   createReserva: (reserva) => api.post("/reserva", reserva),
+  deleteReserva: (reservaId) => api.delete(`/reserva/${reservaId}`),
+  updateReserva: (reservaId, dados) => api.put(`/reserva/${reservaId}`, dados),
 };
 
 export default sheets;

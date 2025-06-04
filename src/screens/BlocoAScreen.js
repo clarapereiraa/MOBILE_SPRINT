@@ -100,8 +100,9 @@ export default function BlocoAScreen({ route }) {
       <MaterialIcons
         style={styles.title}
         name="calendar-today"
-        size={50}
-        color="#fff"
+        size={90}
+        color="red"
+        
       />
 
       {loading ? (
@@ -216,10 +217,11 @@ const styles = StyleSheet.create({
     fontSize: 22,
     fontWeight: "bold",
     marginBottom: 30,
+    alignItems: "center",
   },
   salaCard: {
     padding: 15,
-    backgroundColor: "#f1f1f1",
+    
     marginBottom: 10,
     borderRadius: 8,
   },

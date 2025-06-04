@@ -1,33 +1,28 @@
-import React, { useLayoutEffect } from 'react';
+import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
-import { Ionicons } from '@expo/vector-icons'; 
+import Icon from 'react-native-vector-icons/FontAwesome';
 
 export default function SalasScreen({ navigation, route }) {
   const { user } = route.params;
 
-  useLayoutEffect(() => {
-    navigation.setOptions({
-      headerRight: () => (
-        <TouchableOpacity
-          onPress={() => navigation.navigate('Perfil')}
-          style={{ marginRight: 15 }}
-        >
-          <Ionicons name="person-circle-outline" size={28} color="black" />
-        </TouchableOpacity>
-      ),
-      headerLeft: () => (
-        <TouchableOpacity
-          onPress={() => navigation.goBack()}
-          style={{ marginLeft: 15 }}
-        >
-          <Ionicons name="home-outline" size={28} color="black" />
-        </TouchableOpacity>
-      ),
-    });
-  }, [navigation]);
-
   return (
     <View style={styles.container}>
+      {/* Botão Perfil */}
+      <TouchableOpacity
+        style={styles.perfilIcon}
+        onPress={() => navigation.navigate("Perfil", { user })}
+      >
+        <Icon name="user-circle" size={32} color="#000" />
+      </TouchableOpacity>
+
+      {/* Botão Home */}
+      <TouchableOpacity
+        style={styles.homeIcon}
+        onPress={() => navigation.goBack()}
+      >
+        <Icon name="home" size={28} color="black" />
+      </TouchableOpacity>
+
       <Text style={styles.title}>Escolha o bloco</Text>
 
       <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Bloco A', { user })}>
@@ -65,7 +60,6 @@ const styles = StyleSheet.create({
     color: "#fff",
     fontWeight: "bold",
     fontSize: 50,
-    marginLeft: 0,
   },
   button: {
     flexDirection: "column",
@@ -78,5 +72,17 @@ const styles = StyleSheet.create({
     height: 150,
     maxWidth: 300,
     justifyContent: "center",
+  },
+  homeIcon: {
+    position: "absolute",
+    top: 40,
+    left: 20,
+    zIndex: 10,
+  },
+  perfilIcon: {
+    position: "absolute",
+    top: 40,
+    right: 20,
+    zIndex: 10,
   },
 });

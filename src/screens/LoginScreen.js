@@ -31,7 +31,7 @@ export default function Login({ navigation }) {
         Alert.alert("OK", response.data.message);
         saveToken(response.data.token);
       
-        navigation.navigate("Home",{user:response.data.user.usuarioId});
+        navigation.navigate("Home", { user: response.data.user });
       },
       (error) => {
         console.log(error);

@@ -14,20 +14,18 @@ export default function MinhasReservasScreen({ navigation, route }) {
   const [reservas, setReservas] = useState([]);
   const { user } = route.params;
 
+  const [reservaSelecionada, setReservaSelecionada] = useState(null);
+  const [mostrarModal, setMostrarModal] = useState(false);
+
   useEffect(() => {
-    console.log("route.params:", route.params);
-    console.log("Usuário logado:", user);
     if (user && user.id_usuario) {
       carregarReservas();
-    } else {
-      console.log("Usuário não definido ou sem id");
     }
   }, []);
 
   const carregarReservas = async () => {
     try {
       const response = await api.getReservaByUsuario(user.id_usuario);
-      // Dependendo do formato da resposta, ajuste aqui:
       setReservas(response.data.reservas || response.data || []);
     } catch (error) {
       console.log("Erro ao buscar reservas:", error);
@@ -40,7 +38,7 @@ export default function MinhasReservasScreen({ navigation, route }) {
       Alert.alert("Sucesso", "Reserva excluída!");
       carregarReservas();
     } catch (error) {
-      console.log("Erro ao excluir reserva:", error);
+      console.log("Erro ao excluir reserva:", error.response.data.error);
     }
   };
 
@@ -50,7 +48,11 @@ export default function MinhasReservasScreen({ navigation, route }) {
       "Deseja realmente excluir esta reserva?",
       [
         { text: "Cancelar", style: "cancel" },
-        { text: "Excluir", onPress: () => excluirReserva(id), style: "destructive" },
+        {
+          text: "Excluir",
+          onPress: () => excluirReserva(id),
+          style: "destructive",
+        },
       ]
     );
   };
@@ -73,19 +75,17 @@ export default function MinhasReservasScreen({ navigation, route }) {
             <View key={reserva.id_reserva} style={styles.card}>
               <Text style={styles.salaText}>{reserva.sala}</Text>
               <Text style={styles.label}>
-                Data: {reserva.datahora_inicio}
+                Data: {new Date(reserva.datahora_inicio).toLocaleDateString()}
               </Text>
               <Text style={styles.label}>
-                Horário: {reserva.datahora_inicio} - {reserva.datahora_fim}
+                Horário:{" "}
+                {new Date(reserva.datahora_inicio).toLocaleTimeString()} -{" "}
+                {new Date(reserva.datahora_fim).toLocaleTimeString()}
+              </Text>
+              <Text style={styles.label}>
+                Classificação: {reserva.classificacao}
               </Text>
               <View style={styles.iconRow}>
-                <TouchableOpacity
-                  onPress={() =>
-                    navigation.navigate("EditarReserva", { reserva })
-                  }
-                >
-                  <Icon name="pencil" size={18} style={styles.icon} />
-                </TouchableOpacity>
                 <TouchableOpacity
                   onPress={() => confirmarExclusao(reserva.id_reserva)}
                 >
@@ -122,7 +122,7 @@ const styles = StyleSheet.create({
     marginBottom: 25,
   },
   headerText: {
-    fontSize: 22,
+    fontSize: 30,
     fontWeight: "bold",
     color: "#FF0000",
   },
@@ -142,7 +142,7 @@ const styles = StyleSheet.create({
     marginBottom: 6,
   },
   label: {
-    fontSize: 14,
+    fontSize: 20,
     marginBottom: 2,
   },
   iconRow: {

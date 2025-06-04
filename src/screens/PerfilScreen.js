@@ -1,6 +1,6 @@
-import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
-import Icon from 'react-native-vector-icons/FontAwesome';
+import React from "react";
+import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
+import Icon from "react-native-vector-icons/FontAwesome";
 
 export default function PerfilScreen({ route, navigation }) {
   const { user } = route.params || {};
@@ -8,7 +8,7 @@ export default function PerfilScreen({ route, navigation }) {
   if (!user) {
     return (
       <View style={styles.container}>
-        <Text style={{ color: 'red', fontWeight: 'bold' }}>
+        <Text style={{ color: "red", fontWeight: "bold" }}>
           Erro: dados do usuário não recebidos.
         </Text>
       </View>
@@ -17,7 +17,10 @@ export default function PerfilScreen({ route, navigation }) {
 
   return (
     <View style={styles.container}>
-      <TouchableOpacity style={styles.homeIcon} onPress={() => navigation.navigate('Home')}>
+      <TouchableOpacity
+        style={styles.homeIcon}
+        onPress={() => navigation.goBack()}
+      >
         <Icon name="home" size={28} color="black" />
       </TouchableOpacity>
 
@@ -41,7 +44,7 @@ export default function PerfilScreen({ route, navigation }) {
             <Text style={styles.label}>Senha:</Text>
             <Text style={styles.valor}>***********</Text>
           </View>
-          <TouchableOpacity onPress={() => navigation.navigate('AlterarSenha', { userId: user.id })}>
+          <TouchableOpacity>
             <Icon name="pencil" size={20} color="black" />
           </TouchableOpacity>
         </View>
@@ -53,50 +56,49 @@ export default function PerfilScreen({ route, navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#e6e6e6',
-    alignItems: 'center',
+    backgroundColor: "#e6e6e6",
+    alignItems: "center",
     paddingTop: 40,
   },
   homeIcon: {
-    position: 'absolute',
+    position: "absolute",
     top: 20,
     left: 20,
   },
   logoSENAI: {
     fontSize: 32,
-    fontWeight: 'bold',
-    color: 'white',
-    backgroundColor: 'red',
+    fontWeight: "bold",
+    color: "white",
+    backgroundColor: "red",
     paddingHorizontal: 16,
     paddingVertical: 4,
     marginVertical: 16,
-    fontStyle: 'italic',
-    textAlign: 'center',
+    fontStyle: "italic",
+    textAlign: "center",
   },
   titulo: {
     fontSize: 22,
-    fontWeight: 'bold',
+    fontWeight: "bold",
     marginBottom: 20,
   },
   card: {
-    width: '85%',
-    backgroundColor: 'white',
+    width: "85%",
+    backgroundColor: "white",
     borderRadius: 10,
     padding: 20,
     elevation: 5,
   },
   label: {
-    fontWeight: 'bold',
+    fontWeight: "bold",
     marginTop: 10,
   },
   valor: {
     marginBottom: 5,
   },
   linhaSenha: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
     marginTop: 10,
   },
 });
-

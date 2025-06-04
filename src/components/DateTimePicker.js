@@ -32,8 +32,8 @@ const DateTimePickerDefault = ({ type, buttonTitle, dateKey, setValue }) => {
     hideDatePicker();
   };
   return (
-    <View>
-      <Button title={buttonTitle} onPress={showDatePicker} color="blue" />
+    <View style={{ marginTop: 10}}>
+      <Button title={buttonTitle} onPress={showDatePicker} color="red" />
       <DateTimePicker
         isVisible={isDatepickerVisable}
         mode={type}
