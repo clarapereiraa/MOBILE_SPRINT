@@ -1,10 +1,14 @@
-import React from "react";
+import React, { useState } from "react";
 import { View, Text, StyleSheet, TouchableOpacity, Alert } from "react-native";
 import Icon from "react-native-vector-icons/FontAwesome";
 import api from "../axios/axios";
+import EditarPerfil from "../components/EditarPerfil";
+import * as SecureStore from "expo-secure-store";
 
 export default function PerfilScreen({ route, navigation }) {
-  const { user } = route.params || {};
+  const { user: userFromParams } = route.params || {};
+  const [user, setUser] = useState(userFromParams || {});
+  const [modalVisible, setModalVisible] = useState(false);
 
   if (!user) {
     return (
@@ -16,9 +20,19 @@ export default function PerfilScreen({ route, navigation }) {
     );
   }
 
+  // Função de logout
+  const logout = async () => {
+    await SecureStore.deleteItemAsync("token");
+    navigation.reset({
+      index: 0,
+      routes: [{ name: "Login" }],
+    });
+  };
+
   const excluirUsuario = async (id) => {
     try {
-      await api.delete(`/usuario/${id}`);
+      await api.deleteUser(id);
+      await SecureStore.deleteItemAsync("token");
       Alert.alert("Sucesso", "Usuário excluído com sucesso.");
       navigation.reset({
         index: 0,
@@ -27,16 +41,16 @@ export default function PerfilScreen({ route, navigation }) {
     } catch (error) {
       console.log(
         "Erro ao excluir usuário:",
-        error.response?.data?.error || error.message
+        error.response?.data || error.message
       );
       Alert.alert("Erro", "Não foi possível excluir o usuário.");
     }
   };
 
-  const confirmarExclusaoUsuario = (id) => {
+  const confirmarExclusao = (id) => {
     Alert.alert(
       "Confirmar exclusão",
-      "Tem certeza de que deseja excluir sua conta?",
+      "Deseja realmente excluir sua conta? Essa ação não poderá ser desfeita.",
       [
         { text: "Cancelar", style: "cancel" },
         {
@@ -50,11 +64,17 @@ export default function PerfilScreen({ route, navigation }) {
 
   return (
     <View style={styles.container}>
+      {/* Ícone home */}
       <TouchableOpacity
         style={styles.homeIcon}
         onPress={() => navigation.goBack()}
       >
         <Icon name="home" size={28} color="black" />
+      </TouchableOpacity>
+
+      {/* Ícone logout no topo direito */}
+      <TouchableOpacity style={styles.logoutIcon} onPress={logout}>
+        <Icon name="sign-out" size={28} color="black" />
       </TouchableOpacity>
 
       <Text style={styles.logoSENAI}>SENAI</Text>
@@ -63,11 +83,25 @@ export default function PerfilScreen({ route, navigation }) {
       <Text style={styles.titulo}>Meu perfil</Text>
 
       <View style={styles.card}>
-        <Text style={styles.label}>Nome Completo:</Text>
-        <Text style={styles.valor}>{user.nome}</Text>
+        <View
+          style={{
+            flexDirection: "row",
+            justifyContent: "space-between",
+            alignItems: "center",
+          }}
+        >
+          <View style={{ flex: 1 }}>
+            <Text style={styles.label}>Nome Completo:</Text>
+            <Text style={styles.valor}>{user.nome}</Text>
 
-        <Text style={styles.label}>E-mail:</Text>
-        <Text style={styles.valor}>{user.email}</Text>
+            <Text style={styles.label}>E-mail:</Text>
+            <Text style={styles.valor}>{user.email}</Text>
+          </View>
+
+          <TouchableOpacity onPress={() => setModalVisible(true)}>
+            <Icon name="pencil" size={20} color="black" />
+          </TouchableOpacity>
+        </View>
 
         <Text style={styles.label}>CPF:</Text>
         <Text style={styles.valor}>{user.cpf}</Text>
@@ -77,19 +111,22 @@ export default function PerfilScreen({ route, navigation }) {
             <Text style={styles.label}>Senha:</Text>
             <Text style={styles.valor}>***********</Text>
           </View>
-          <TouchableOpacity>
-            <Icon name="pencil" size={20} color="black" />
-          </TouchableOpacity>
         </View>
+
+        <TouchableOpacity
+          style={styles.iconExcluir}
+          onPress={() => confirmarExclusao(user.id_usuario)}
+        >
+          <Icon name="times" size={20} color="black" />
+        </TouchableOpacity>
       </View>
 
-      {/* Botão de excluir conta */}
-      <TouchableOpacity
-        style={styles.botaoExcluir}
-        onPress={() => confirmarExclusaoUsuario(user.id_usuario)}
-      >
-        <Text style={styles.textoBotaoExcluir}>Excluir Conta</Text>
-      </TouchableOpacity>
+      <EditarPerfil
+        visible={modalVisible}
+        onClose={() => setModalVisible(false)}
+        user={user}
+        onUpdate={(updatedUser) => setUser(updatedUser)}
+      />
     </View>
   );
 }
@@ -105,6 +142,11 @@ const styles = StyleSheet.create({
     position: "absolute",
     top: 20,
     left: 20,
+  },
+  logoutIcon: {
+    position: "absolute",
+    top: 20,
+    right: 20,
   },
   logoSENAI: {
     fontSize: 32,
@@ -142,17 +184,14 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginTop: 10,
   },
-  botaoExcluir: {
-    marginTop: 20,
-    backgroundColor: "red",
-    padding: 12,
-    borderRadius: 8,
-    width: "85%",
+  iconExcluir: {
+    position: "absolute",
+    top: 10,
+    right: 10,
+    padding: 10,
   },
-  textoBotaoExcluir: {
+  textoExcluir: {
     color: "white",
     fontWeight: "bold",
-    textAlign: "center",
-    fontSize: 16,
   },
 });
