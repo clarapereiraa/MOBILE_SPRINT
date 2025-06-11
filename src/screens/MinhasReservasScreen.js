@@ -14,9 +14,6 @@ export default function MinhasReservasScreen({ navigation, route }) {
   const [reservas, setReservas] = useState([]);
   const { user } = route.params;
 
-  const [reservaSelecionada, setReservaSelecionada] = useState(null);
-  const [mostrarModal, setMostrarModal] = useState(false);
-
   useEffect(() => {
     if (user && user.id_usuario) {
       carregarReservas();

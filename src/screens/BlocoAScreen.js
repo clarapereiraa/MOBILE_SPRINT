@@ -80,6 +80,7 @@ export default function BlocoAScreen({ route }) {
     try {
       const response = await api.getAllReserva();
       const reservasSalaSelecionada = [];
+      console.log(response.data.reservas)
       response.data.reservas.forEach((reservaFiltro) => {
         // FILTRAR AS RESERVAS DENTRE AS QUAIS SÃO SOMENTE DA SALA SELECIONADA
         if (reservaFiltro.fk_id_sala === sala.id_sala) {

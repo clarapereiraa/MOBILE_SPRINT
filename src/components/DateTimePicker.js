@@ -20,8 +20,6 @@ const DateTimePickerDefault = ({ type, buttonTitle, dateKey, setValue }) => {
       setValue((prevState) => ({
         ...prevState,
         [dateKey]: formattedTime,
-        // ele pega o valor que esssa chave representa, dateKey representa date
-        //  sendo assim ele altera o valor de date
       }));
     } else {
       setValue((prevState) => ({
